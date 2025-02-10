@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { CiShoppingCart } from "react-icons/ci";
 import { useCart } from "../context/userContentProvider";
-import { Button } from "react-aria-components";
 
 interface Electronics {
   id: number;
@@ -14,7 +13,7 @@ interface Electronics {
 }
 
 export const Electronics = () => {
-  const { addToCart, removeFromCart } = useCart() || {
+  const { addToCart } = useCart() || {
     addToCart: () => {},
     removeFromCart: () => {},
   };

@@ -83,7 +83,7 @@ function Dashboard() {
               </Link>
               <Button
                 className="bg-orange-400 hover:bg-orange-300 text-white font-bold py-2 px-4   rounded-lg"
-                onPress={(e) => {
+                onPress={() => {
                   deleteProduct(product.id);
                 }}
               >

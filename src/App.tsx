@@ -3,7 +3,7 @@ import Layout from "./layout/Layout";
 import Dashboard from "./pages/dashboard.tsx";
 import { Details } from "./pages/details.tsx";
 import { Electronics } from "./pages/electronics.tsx";
-import UserContext from "./context/userContext.tsx";
+// import UserContext from "./context/userContext.tsx";
 import UserContextProvider from "./context/userContentProvider.tsx";
 
 import Jewelery from "./pages/jewelery.tsx";

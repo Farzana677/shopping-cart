@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CiShoppingCart } from "react-icons/ci";
 import { useCart } from "../context/userContentProvider";
 interface Jewelery {
@@ -12,7 +12,7 @@ interface Jewelery {
 }
 function Jewelery() {
   const [data, setData] = useState<Jewelery[]>([]);
-  const { addToCart, removeFromCart } = useCart() || {
+  const { addToCart } = useCart() || {
     addToCart: () => {},
     removeFromCart: () => {},
   };
@@ -87,10 +87,6 @@ function Jewelery() {
                   <button className="text-orange-400 font-bold py-2 px-4 border border-orange-400 rounded-lg hover:bg-orange-400 hover:text-white">
                     Details
                   </button>
-
-
-                  
-                  
                 </div>
               </div>
             );
