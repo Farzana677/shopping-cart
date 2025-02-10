@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+
+
+@keyframes custom-animation{
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+.custom-animation{
+    animation: custom-animation 0.9s linear;
+}
