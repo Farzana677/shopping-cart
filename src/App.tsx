@@ -2,14 +2,15 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import Layout from "./layout/Layout";
 import Dashboard from "./pages/dashboard.tsx";
 import { Details } from "./pages/details.tsx";
-import { Electronics } from "./pages/electronics.tsx";
+// import { Electronics } from "./pages/electronics.tsx";
 // import UserContext from "./context/userContext.tsx";
 import UserContextProvider from "./context/userContentProvider.tsx";
 
-import Jewelery from "./pages/jewelery.tsx";
+// import Jewelery from "./pages/jewelery.tsx";
 import Login from "./pages/login.tsx";
 import Users from "./pages/users.tsx";
 import Product from "./pages/product.tsx";
+import Contact from "./pages/contact.tsx";
 
 function App() {
   return (
@@ -20,9 +21,11 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/product/:id" element={<Details />} />
-            <Route path="/jewelery" element={<Jewelery />} />
-            <Route path="/electronics" element={<Electronics />} />
-            <Route path="/men" element={<Product />} />
+            {/* <Route path="/jewelery" element={<Jewelery />} /> */}
+            {/* <Route path="/electronics" element={<Electronics />} /> */}
+            <Route path="/contact" element={<Contact />} />
+
+            <Route path="/categories" element={<Product />} />
 
             {/* <Route path="/login" element ={<Login/>}/> */}
           </Route>

@@ -8,10 +8,10 @@ import { useCart } from "../context/userContentProvider";
 
 const navigationItems = [
   { path: "/dashboard", label: "All Products" },
-  { path: "/men", label: "Men" },
-  { path: "/JEWELERY", label: "Jewelry" },
-  { path: "/about", label: "About" },
-  { path: "/electronics", label: "Electronics" },
+  { path: "/categories", label: "Categories" },
+  // { path: "/JEWELERY", label: "Jewelry" },
+  { path: "/contact", label: "Contact" },
+  // { path: "/electronics", label: "Electronics" },
   { path: "/login", label: "Login" },
 ];
 
@@ -72,7 +72,7 @@ export default function Sidebar() {
       </div>
 
       {/* Center Logo */}
-      <Link to="/" className="flex items-center justify-center flex-grow">
+      <Link to="/" className="flex items-center justify-center flex-grow gap-2">
         <span className="logo text-xl font-semibold">Swiftcart</span>
       </Link>
 
