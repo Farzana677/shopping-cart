@@ -54,7 +54,7 @@ export const Electronics = () => {
   }, []);
 
   return (
-    <div>
+    <>
       <h1 className="text-center text-3xl">Electronics</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10 lg:grid-cols-3 xxl:grid-cols-4">
         {electronics.length ? (
@@ -121,6 +121,6 @@ export const Electronics = () => {
           <div>Loading...</div>
         )}
       </div>
-    </div>
+    </>
   );
 };

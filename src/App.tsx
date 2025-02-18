@@ -9,6 +9,7 @@ import UserContextProvider from "./context/userContentProvider.tsx";
 import Jewelery from "./pages/jewelery.tsx";
 import Login from "./pages/login.tsx";
 import Users from "./pages/users.tsx";
+import Product from "./pages/product.tsx";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/product/:id" element={<Details />} />
             <Route path="/jewelery" element={<Jewelery />} />
             <Route path="/electronics" element={<Electronics />} />
+            <Route path="/men" element={<Product />} />
 
             {/* <Route path="/login" element ={<Login/>}/> */}
           </Route>

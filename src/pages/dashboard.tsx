@@ -1,8 +1,13 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button } from "react-aria-components";
-import { Link } from "react-router";
-interface productsData {
+import axios from "axios";
+import SimpleSlider from "./slider";
+import Fourcard from "./fourcard";
+import cart from "../assets/cartgirl.jpg";
+import SwiftCart from "./swiftcart";
+import FreeDeliveryBanner from "./freedelivery";
+import Footer from "./footer";
+
+interface ProductData {
   id: number;
   title: string;
   category: string;
@@ -10,92 +15,113 @@ interface productsData {
   description: string;
   image: string;
 }
-function Dashboard() {
-  const [products, setProducts] = useState<productsData[]>([]);
 
-  const deleteProduct = (id: any) => {
-    console.log("deleting product with id:", id);
-    fetch(`https://fakestoreapi.com/products/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        console.log("Deleted product:", json);
-        setProducts((prev) => prev.filter((product) => product.id !== id));
-      })
-      .catch((error) => console.error("Error deleting product:", error));
-  };
+const Dashboard = () => {
+  const [products, setProducts] = useState<ProductData[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("electronics");
 
-  useEffect(() => {
+  const fetchProductsByCategory = (category: string) => {
     axios
-      .get("https://fakestoreapi.com/products?sort=desc")
+      .get(`https://fakestoreapi.com/products/category/${category}`)
       .then((res) => {
         setProducts(res.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+  };
+
+  useEffect(() => {
+    fetchProductsByCategory(selectedCategory);
   }, []);
 
+  const categories = [
+    { id: "electronics", label: "ELECTRONICS" },
+    { id: "jewelery", label: "JEWELERY" },
+    { id: "men's clothing", label: "MEN'S CLOTHING" },
+    { id: "women's clothing", label: "WOMEN'S CLOTHING" },
+  ];
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10">
-      {products ? (
-        products.map((product: any) => (
-          <div
-            key={product.id}
-            className="max-w-sm rounded- overflow-hidden  mx-auto p-8 bg-white border border-orange-400 "
-          >
-            <div className="relative w-full h-56 bg-white p-2 shadow-md rounded-lg">
-              <img
-                className="object-contain w-full h-full  mix-blend-multiply"
-                src={product?.image}
-                alt="Product"
-              />
+    <>
+      <div className="container mx-auto px-4">
+        <SimpleSlider />
+        <Fourcard />
+
+        <div className="flex gap-8 mt-8">
+          {/* Left side - Hero Image */}
+          <div className="w-1/3">
+            <img
+              src={cart}
+              alt="Shopping Cart Girl"
+              className="w-full h-auto rounded-lg shadow-lg"
+            />
+          </div>
+
+          {/* Right side - Categories and Products */}
+          <div className="w-2/3">
+            {/* Categories Navigation */}
+            <div className="mb-8">
+              <div className="flex space-x-8">
+                {categories.map((category) => (
+                  <button
+                    key={category.id}
+                    className={`pb-2 px-4 text-lg font-medium transition-colors ${
+                      selectedCategory === category.id
+                        ? "text-blue-600 border-b-2 border-blue-600"
+                        : "text-gray-500 hover:text-blue-600"
+                    }`}
+                    onClick={() => {
+                      setSelectedCategory(category.id);
+                      fetchProductsByCategory(category.id);
+                    }}
+                  >
+                    {category.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="py-4">
-              <div className="font-bold text-lg mb-2 text-orange-400 uppercase tracking-wide">
-                {product?.category}
-              </div>
-              <p className="text-gray-700 text-base">{product?.price}</p>
-            </div>
-            <div className="pt-4 pb-2">
-              <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                {product?.price}
-              </span>
-              <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                50%
-              </span>
-              <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                $109.95
-              </span>
-            </div>
-            <div className="flex gap-4">
-              <button className="bg-orange-400 hover:bg-orange-300 text-white font-bold py-2 px-4   rounded-lg">
-                Add to Cart
-              </button>
-              {/* Wrap only the "Details" button with Link */}
-              <Link
-                to={`/product/${product.id}`}
-                className="text-orange-400 font-bold py-2 px-4 border border-orange-400 rounded-lg hover:bg-orange-400 hover:text-white"
-              >
-                Details
-              </Link>
-              <Button
-                className="bg-orange-400 hover:bg-orange-300 text-white font-bold py-2 px-4   rounded-lg"
-                onPress={() => {
-                  deleteProduct(product.id);
-                }}
-              >
-                Delete
-              </Button>
+            {/* Products Grid */}
+            <div className="grid grid-cols-3 gap-6">
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  className="bg-white rounded-lg shadow-md p-4"
+                >
+                  <div className="aspect-square mb-4 relative">
+                    <img
+                      src={product.image}
+                      alt={product.title}
+                      className="absolute inset-0 w-full h-full object-contain mix-blend-multiply"
+                    />
+                  </div>
+                  <h3 className="font-medium text-lg mb-2 truncate">
+                    {product.title}
+                  </h3>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-lg font-bold">${product.price}</p>
+                      <p className="text-sm text-gray-500">
+                        In Stock: {Math.floor(Math.random() * 500)}
+                      </p>
+                    </div>
+                  </div>
+                  <button className="bg-rose-400 hover:bg-rose-500 text-white px-4 py-2 rounded-lg">
+                    Add to cart
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
-        ))
-      ) : (
-        <p className="text-white">Loading product data...</p>
-      )}
-    </div>
+        </div>
+      </div>
+      <FreeDeliveryBanner />
+
+      <SwiftCart />
+      <Footer />
+    </>
   );
-}
+};
+
 export default Dashboard;

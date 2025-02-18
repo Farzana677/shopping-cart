@@ -1,15 +1,15 @@
-import { useCart } from "../context/userContentProvider";
-import { CiShoppingCart } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
+import { CiShoppingCart } from "react-icons/ci";
+import { FaHeart, FaBars } from "react-icons/fa";
 import { IoIosTrash } from "react-icons/io";
 import { Button } from "react-aria-components";
-import logo2 from "../assets/logo2.jpg";
+import { useCart } from "../context/userContentProvider";
 
 const navigationItems = [
   { path: "/dashboard", label: "All Products" },
   { path: "/men", label: "Men" },
-  { path: "/JEWELERY", label: "Jewelary" },
+  { path: "/JEWELERY", label: "Jewelry" },
   { path: "/about", label: "About" },
   { path: "/electronics", label: "Electronics" },
   { path: "/login", label: "Login" },
@@ -20,28 +20,39 @@ export default function Sidebar() {
     cartItems: [],
     removeFromCart: () => {},
   };
-
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [bounce, setBounce] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Track menu open/close state
 
   const handleCartClick = () => {
     setIsCartOpen(!isCartOpen);
   };
-  // Calculate the total cart value considering quantities
+
+  const handleAvatarClick = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleMenuToggle = () => {
+    setIsMenuOpen(!isMenuOpen); // Toggle menu visibility
+  };
+
   const calculateTotal = () => {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
 
-  // Calculate total quantity of items in the cart
   const calculateCartQuantity = () => {
     return cartItems.reduce((acc, item) => acc + item.quantity, 0);
   };
+
   const navigate = useNavigate();
-  const handlePress = () => {
-    console.log("clicked");
+  const handleLoginClick = () => {
     navigate("/login");
   };
-  // Trigger bounce effect when cartItems change
+
+  const handleSignOut = () => {
+    console.log("User signed out.");
+  };
   useEffect(() => {
     if (cartItems.length > 0 || cartItems.length === 0) {
       setBounce(true);
@@ -52,27 +63,42 @@ export default function Sidebar() {
     }
   }, [cartItems]);
   return (
-    <nav className="flex justify-between items-center">
-      <Link to="/" className="flex items-center space-x-2">
-        {" "}
-        {/* This will align the logo and text in a row */}
-        <img
-          src={logo2}
-          alt="Logo"
-          className="h-20 object-contain cursor-pointer"
-        />
-        <span className="logo text-xl font-semibold">Swiftcart</span>{" "}
-        {/* Add some styling to the text if needed */}
+    <nav className="sm:flex md:flex justify-between items-center p-4 text-white">
+      {/* Hamburger Icon (only on small screens) */}
+      <div className="md:hidden flex items-center">
+        <button onClick={handleMenuToggle}>
+          <FaBars size={30} />
+        </button>
+      </div>
+
+      {/* Center Logo */}
+      <Link to="/" className="flex items-center justify-center flex-grow">
+        <span className="logo text-xl font-semibold">Swiftcart</span>
       </Link>
 
-      <div className="flex space-x-4">
+      {/* Avatar Logo on the Right */}
+      <div className="flex items-center gap-4">
+        <img
+          className="inline-block size-8 rounded-full ring-2 ring-white cursor-pointer"
+          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+          alt="profile"
+          onClick={handleAvatarClick}
+        />
+      </div>
+
+      {/* Navigation Links (Responsive) */}
+      <div
+        className={`flex flex-wrap gap-4 w-full justify-center md:justify-center ${
+          isMenuOpen ? "block" : "hidden"
+        } md:flex md:flex-wrap md:gap-4`}
+      >
         {navigationItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `px-3 py-2 rounded-md text-lg font-bold ${
-                isActive ? "text-gray-800" : "text-white"
+              `w-full md:w-auto px-3 py-2 text-lg font-bold text-center ${
+                isActive ? "text-white border-b-2 border-white" : "text-white"
               }`
             }
           >
@@ -81,6 +107,7 @@ export default function Sidebar() {
         ))}
       </div>
 
+      {/* Profile and Cart Section */}
       <div className="flex items-center gap-4">
         <Button
           onPress={handleCartClick}
@@ -88,28 +115,47 @@ export default function Sidebar() {
             bounce ? "custom-animation" : ""
           }`}
         >
-          <span className="rounded-full bg-orange-500 w-5 h-5 text-white flex items-center justify-center absolute -top-2 -right-2">
+          <span className="rounded-full bg-black w-5 h-5 text-white flex items-center justify-center absolute -top-2 -right-2">
             {calculateCartQuantity()}
           </span>
-
-          <CiShoppingCart size={30} color="oklch(0.705 0.213 47.604)" />
+          <CiShoppingCart size={38} />
         </Button>
-        <img
-          className="inline-block size-8 rounded-full ring-2 ring-white"
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt="profile"
-        />
+        <FaHeart size={38} />
       </div>
 
-      {isCartOpen && (
-        <div className="absolute top-16 right-8 bg-white shadow-lg p-4 rounded-md w-64 overflow-y-auto border border-orange-500 mt-2 z-10">
-          <h3 className="text-xl font-semibold">Cart</h3>
+      {/* Dropdown menu */}
+      {isDropdownOpen && (
+        <div className="absolute top-16 right-8 bg-white shadow-lg p-4 rounded-md w-48 z-10">
+          <ul>
+            <li className="py-2 border-b">
+              <button
+                className="w-full text-left text-sm font-semibold text-gray-700"
+                onClick={handleSignOut}
+              >
+                Sign Out
+              </button>
+            </li>
+            <li className="py-2">
+              <button
+                className="w-full text-left text-sm font-semibold text-gray-700"
+                onClick={handleLoginClick}
+              >
+                Login
+              </button>
+            </li>
+          </ul>
+        </div>
+      )}
 
+      {/* Cart Menu */}
+      {isCartOpen && (
+        <div className="absolute top-16 right-8 bg-white shadow-lg p-4 rounded-md w-64 overflow-y-auto border border-white mt-2 z-10">
+          <h3 className="text-xl font-semibold">Cart</h3>
           {cartItems.length === 0 ? (
             <p className="text-gray-500 text-center">Your cart is empty.</p>
           ) : (
             <ul>
-              {cartItems.map((item: any) => (
+              {cartItems.map((item) => (
                 <li key={item.id} className="py-2 border-b">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-semibold line-clamp-1">
@@ -118,14 +164,12 @@ export default function Sidebar() {
                     <span className="text-sm text-gray-500">
                       x{item.quantity}
                     </span>
-
                     <Button onPress={() => removeFromCart(item.id)}>
                       <IoIosTrash size={40} />
                     </Button>
                   </div>
-
                   <p className="text-xs text-gray-500">{item.category}</p>
-                  <p className="text-sm font-semibold text-orange-500">
+                  <p className="text-sm font-semibold text-black">
                     ${item.price} x {item.quantity} = $
                     {item.price * item.quantity}
                   </p>
@@ -133,19 +177,17 @@ export default function Sidebar() {
               ))}
             </ul>
           )}
-
           {cartItems.length > 0 && (
             <div className="mt-4 flex justify-between">
               <p className="font-semibold">Total:</p>
-              <p className="font-semibold text-orange-500">
+              <p className="font-semibold text-black">
                 ${calculateTotal().toFixed(2)}
               </p>
             </div>
           )}
-
           <Button
-            className="bg-orange-400 text-white font-bold py-2 px-4 border border-orange-400 rounded-lg hover:bg-orange-400 hover:text-white w-full"
-            onPress={handlePress}
+            className="bg-[#d77a7a;] text-white font-bold py-2 px-4 border  rounded-lg hover:cursor-pointer w-full"
+            onPress={handleLoginClick}
           >
             Checkout
           </Button>

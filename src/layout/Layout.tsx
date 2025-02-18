@@ -3,17 +3,21 @@ import Sidebar from "../components/sidebar";
 
 const Layout = () => {
   return (
-    <div>
-      {/* Sidebar as top navigation */}
-      <header className="p-4 bg-[#d77a7a;] text-white">
+    <>
+      <header className="p-4 bg-[#d77a7a] text-white">
         <Sidebar />
       </header>
 
-      {/* Main content */}
-      <main style={{ padding: "20px" }}>
+      <main
+        style={{
+          padding: "0px",
+          overflowY: "auto",
+          height: "calc(100vh - 80px)",
+        }}
+      >
         <Outlet />
       </main>
-    </div>
+    </>
   );
 };
 
