@@ -23,18 +23,26 @@ export default function Sidebar() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [bounce, setBounce] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Track menu open/close state
-
-  const handleCartClick = () => {
-    setIsCartOpen(!isCartOpen);
-  };
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleAvatarClick = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    if (isCartOpen) {
+      setIsCartOpen(false);
+    }
+
+    setIsDropdownOpen((prev) => !prev);
+  };
+
+  const handleCartClick = () => {
+    if (isDropdownOpen) {
+      setIsDropdownOpen(false);
+    }
+
+    setIsCartOpen((prev) => !prev);
   };
 
   const handleMenuToggle = () => {
-    setIsMenuOpen(!isMenuOpen); // Toggle menu visibility
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const calculateTotal = () => {
@@ -73,7 +81,7 @@ export default function Sidebar() {
 
       {/* Center Logo */}
       <Link to="/" className="flex items-center justify-center flex-grow gap-2">
-        <span className="logo text-xl font-semibold">Swiftcart</span>
+        <span className="logo text-lg font-semibold mr-2">Swiftcart</span>
       </Link>
 
       {/* Avatar Logo on the Right */}
@@ -125,7 +133,7 @@ export default function Sidebar() {
 
       {/* Dropdown menu */}
       {isDropdownOpen && (
-        <div className="absolute top-16 right-8 bg-white shadow-lg p-4 rounded-md w-48 z-10">
+        <div className="absolute top-16 left-26 bg-white shadow-lg p-4 rounded-md w-48 z-10">
           <ul>
             <li className="py-2 border-b">
               <button
